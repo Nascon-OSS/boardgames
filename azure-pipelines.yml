@@ -1,0 +1,21 @@
+# dotnet build
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+  testProject: './src/test/Minsk.Test/Minsk.Test.csproj'
+
+steps:
+
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'dotnet build --configuration $(buildConfiguration)'
+- script: dotnet test $(testProject) --logger "trx;LogFileName=TestResults.xml"
+  displayName: 'dotnet test $(testProject) --logger "trx;LogFileName=TestResults.xml"'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/TestResults.xml'
+    testRunTitle: 'Publish test results'
+
