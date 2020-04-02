@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Boardgames.Console
+namespace Boardgames.ConsoleApp
 {
     class Program
     {
