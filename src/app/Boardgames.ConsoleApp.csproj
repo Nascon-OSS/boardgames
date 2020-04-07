@@ -20,10 +20,6 @@
     </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="boardgames.db">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

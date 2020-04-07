@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Boardgames.ConsoleApp
 {
@@ -50,10 +51,17 @@ namespace Boardgames.ConsoleApp
                     Console.WriteLine("4: Ange spelets längd i minuter per spelare:");
                     var addGameLength = Console.ReadLine();
 
-                    var game = new Boardgame(addGameName, addGamePlayers, addGameDesigner, addGameLength);
+                    var game = new Boardgame(addGameName, addGamePlayers, addGameLength);
+
                     using var db = new BoardgameContext();
+
+                    var designer = db.Gamedesigners.FirstOrDefault(d => d.Name == addGameDesigner) ?? new Gamedesigner(addGameDesigner);
+
+                    game.GameDesigner = designer;
+
                     db.Boardgames.Add(game);
                     db.SaveChanges();
+
                 }
                 else if (input == "9")
                 {
@@ -69,8 +77,30 @@ namespace Boardgames.ConsoleApp
     public class BoardgameContext : DbContext
     {
         public DbSet<Boardgame> Boardgames { get; set; }
-        public DbSet<Designer> Designer { get; set; }
+        public DbSet<Gamedesigner> Gamedesigners { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite("Data Source=boardgames.db");
+        public BoardgameContext() : this(new DbContextOptions<BoardgameContext>())
+        {
+        }
+
+        public BoardgameContext(DbContextOptions<BoardgameContext> options) :base(options)
+        {
+            //Database.EnsureCreated();
+
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            options.UseSqlite($"Data Source=boardgames.db");
+
+
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Gamedesigner>().HasData(new Gamedesigner("Lars Olsson") {Id = 1});
+            modelBuilder.Entity<Boardgame>().HasData(new Boardgame { Id = 1, Name = "Leffes' Quest", MinPlayers = 2, MaxPlayers = 5, GameDesignerId = 1, PlayTime = 30 });
+        }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace Boardgames.ConsoleApp.Migrations
 {
-    public partial class initial : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Designer",
+                name: "Gamedesigners",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -16,42 +16,45 @@ namespace Boardgames.ConsoleApp.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Designer", x => x.Id);
+                    table.PrimaryKey("PK_Gamedesigners", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Games",
+                name: "Boardgames",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
-                    DesignerId = table.Column<int>(nullable: false)
+                    MinPlayers = table.Column<int>(nullable: false),
+                    MaxPlayers = table.Column<int>(nullable: false),
+                    GameDesignerId = table.Column<int>(nullable: false),
+                    PlayTime = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Games", x => x.Id);
+                    table.PrimaryKey("PK_Boardgames", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Games_Designer_DesignerId",
-                        column: x => x.DesignerId,
-                        principalTable: "Designer",
+                        name: "FK_Boardgames_Gamedesigners_GameDesignerId",
+                        column: x => x.GameDesignerId,
+                        principalTable: "Gamedesigners",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Games_DesignerId",
-                table: "Games",
-                column: "DesignerId");
+                name: "IX_Boardgames_GameDesignerId",
+                table: "Boardgames",
+                column: "GameDesignerId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Games");
+                name: "Boardgames");
 
             migrationBuilder.DropTable(
-                name: "Designer");
+                name: "Gamedesigners");
         }
     }
 }

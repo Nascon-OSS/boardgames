@@ -21,20 +21,29 @@ namespace Boardgames.ConsoleApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("DesignerId")
+                    b.Property<int>("GameDesignerId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MaxPlayers")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("MinPlayers")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Name")
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("PlayTime")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignerId");
+                    b.HasIndex("GameDesignerId");
 
-                    b.ToTable("Games");
+                    b.ToTable("Boardgames");
                 });
 
-            modelBuilder.Entity("Boardgames.ConsoleApp.Models.Designer", b =>
+            modelBuilder.Entity("Boardgames.ConsoleApp.Models.Gamedesigner", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,14 +54,14 @@ namespace Boardgames.ConsoleApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Designer");
+                    b.ToTable("Gamedesigners");
                 });
 
             modelBuilder.Entity("Boardgames.ConsoleApp.Models.Boardgame", b =>
                 {
-                    b.HasOne("Boardgames.ConsoleApp.Models.Designer", null)
+                    b.HasOne("Boardgames.ConsoleApp.Models.Gamedesigner", "GameDesigner")
                         .WithMany("Boardgames")
-                        .HasForeignKey("DesignerId")
+                        .HasForeignKey("GameDesignerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

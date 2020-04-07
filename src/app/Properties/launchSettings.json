@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Boardgames.ConsoleApp": {
-      "commandName": "Project",
-      "workingDirectory": "C:\\Coding\\Repos\\boardgames\\src\\app"
+      "commandName": "Project"
     }
   }
 }
