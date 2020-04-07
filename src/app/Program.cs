@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Boardgames.ConsoleApp.Models;
+using System;
+using System.Collections.Generic;
 
 namespace Boardgames.ConsoleApp
 {
     class Program
     {
+        private static List<Boardgame> _games = new List<Boardgame> { new Boardgame("Leif's Quest", "2-4", "Isaac Childres", "90") };
+
         static void Main(string[] args)
         {
             Console.WriteLine("Boardgame Catalogue of Fear and Death and Nice");
@@ -21,11 +25,29 @@ namespace Boardgames.ConsoleApp
 
                 if (input == "1")
                 {
-                    Console.WriteLine("Leif's Quest, 4 spelare, Isaac Childres, 90 minuter per spelare");
+                    foreach (var boardgame in _games)
+                    {
+                        Console.WriteLine(boardgame);
+                    }
+                    Console.WriteLine();
                 }
                 else if (input == "2")
                 {
-                    Console.WriteLine("UNDER CONSTRUCTION");
+                    Console.WriteLine("Hejsan här lägger man till spel.");
+                    Console.WriteLine("1: Ange spelets namn:");
+                    var addGameName = Console.ReadLine();
+
+                    Console.WriteLine("2: Ange spelar-antal:");
+                    var addGamePlayers = Console.ReadLine();
+
+                    Console.WriteLine("3: Ange designer:");
+                    var addGameDesigner = Console.ReadLine();
+
+                    Console.WriteLine("4: Ange spelets längd i minuter per spelare:");
+                    var addGameLength = Console.ReadLine();
+
+                    var game = new Boardgame(addGameName, addGamePlayers, addGameDesigner, addGameLength);
+                    _games.Add(game);
                 }
                 else if (input == "9")
                 {
