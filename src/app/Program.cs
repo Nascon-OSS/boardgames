@@ -1,4 +1,5 @@
 ﻿using Boardgames.ConsoleApp.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +7,7 @@ namespace Boardgames.ConsoleApp
 {
     class Program
     {
-        private static List<Boardgame> _games = new List<Boardgame> { new Boardgame("Leif's Quest", "2-4", "Isaac Childres", "90") };
+        //private static List<Boardgame> _games = new List<Boardgame> { new Boardgame("Leif's Quest", "2-4", "Isaac Childres", "90") };
 
         static void Main(string[] args)
         {
@@ -14,20 +15,23 @@ namespace Boardgames.ConsoleApp
 
             Console.WriteLine();
             bool keepgoing = true;
-            
+
             while (keepgoing)
             {
                 Console.WriteLine("1: Lista spelen");
                 Console.WriteLine("2: Lägg till spel");
                 Console.WriteLine("9: Avsluta");
-                
+
                 var input = Console.ReadLine();
 
                 if (input == "1")
                 {
-                    foreach (var boardgame in _games)
+                    using (var db = new BoardgameContext())
                     {
-                        Console.WriteLine(boardgame);
+                        foreach (var boardgame in db.Boardgames)
+                        {
+                            Console.WriteLine(boardgame);
+                        }
                     }
                     Console.WriteLine();
                 }
@@ -47,7 +51,9 @@ namespace Boardgames.ConsoleApp
                     var addGameLength = Console.ReadLine();
 
                     var game = new Boardgame(addGameName, addGamePlayers, addGameDesigner, addGameLength);
-                    _games.Add(game);
+                    using var db = new BoardgameContext();
+                    db.Boardgames.Add(game);
+                    db.SaveChanges();
                 }
                 else if (input == "9")
                 {
@@ -59,5 +65,12 @@ namespace Boardgames.ConsoleApp
                 }
             }
         }
+    }
+    public class BoardgameContext : DbContext
+    {
+        public DbSet<Boardgame> Boardgames { get; set; }
+        public DbSet<Designer> Designer { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options) => options.UseSqlite("Data Source=boardgames.db");
     }
 }
